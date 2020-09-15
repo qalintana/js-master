@@ -73,7 +73,7 @@ sendButton.addEventListener('click', () => {
     if (currentQuestion < quizData.length) {
       loadQuiz();
     } else {
-      quiz.innerHTML = `<h2>Terminou com ${score}</h2>`;
+      quiz.innerHTML = `<h2>Terminou com ${score}</h2> <button onclick="location.reload()">Reload</button>`;
       currentQuestion = 0;
       loadQuiz();
     }
