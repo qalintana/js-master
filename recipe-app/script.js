@@ -10,9 +10,10 @@ async function getRandomMeal() {
   const resposeData = await response.json();
   const randomMeal = resposeData.meals[0];
 
-  console.log(randomMeal);
+  // console.log(randomMeal);
 
   addMeal(randomMeal, true);
+  console.log(localStorage.getItem('mealIDs'));
 }
 
 async function getMealById(id) {
@@ -49,5 +50,46 @@ function addMeal(mealData, random = false) {
               </button>
             </div>
           `;
+
+  const btn = meal.querySelector('.meal-body .fav-btn');
+
+  btn.addEventListener('click', function () {
+    if (this.classList.contains('active')) {
+      removeMealFromLS(mealData.idMeal);
+      this.classList.remove('active');
+      this.innerHTML = `<img src="img/Nova pasta/heart.svg" alt="" />`;
+    } else {
+      this.classList.add('active');
+      addMealToLS(mealData.idMeal);
+      this.innerHTML = `
+          <img src="img/heart.svg" alt="" />
+        `;
+    }
+  });
   meals.appendChild(meal);
+}
+
+function addMealToLS(mealId) {
+  const mealIds = getMealsFromLS();
+
+  localStorage.setItem('mealIDs', [...JSON.stringify(mealIds), mealId]);
+}
+
+function getMealsFromLS() {
+  const mealIds = JSON.parse(localStorage.getItem('mealsIDs'));
+
+  return mealIds === null ? [] : mealIds;
+}
+
+function removeMealFromLS(mealId) {
+  const mealIds = getMealsFromLS();
+
+  if (!mealIds) {
+    return;
+  }
+
+  localStorage.setItem(
+    'mealIds',
+    JSON.stringify(mealIds.filter((meal) => meal.id !== mealId))
+  );
 }
