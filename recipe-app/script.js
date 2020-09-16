@@ -1,7 +1,12 @@
 const meals = document.getElementById('meals');
 const favoriteContainer = document.getElementById('fav-meals');
+
 const searchTerm = document.getElementById('search-term');
 const seachBtn = document.getElementById('search');
+
+const mealPopUp = document.getElementById('meal-popup-container');
+const mealInfo = document.getElementById('meal-info');
+const closePopUp = document.getElementById('close-popup');
 
 getRandomMeal();
 fetchFavMeals();
@@ -75,6 +80,9 @@ function addMeal(mealData, random = false) {
     }
 
     fetchFavMeals();
+  });
+  meal.addEventListener('click', () => {
+    showMealInfo(mealData);
   });
   meals.appendChild(meal);
 }
@@ -160,3 +168,26 @@ seachBtn.addEventListener('click', async () => {
     });
   }
 });
+
+function showMealInfo(mealData) {
+  mealInfo.innerHTML = '';
+  const mealEl = document.createElement('div');
+
+  mealEl.innerHTML = `
+        <div>
+          <h1>${mealData.strMeal}</h1>
+          <img src="${mealData.strMealThumb}" alt="" />
+        </div>
+        <p>
+          ${mealData.strInstructions}
+        </p>
+     `;
+  mealInfo.appendChild(mealEl);
+
+  mealPopUp.classList.remove('hidden');
+}
+
+closePopUp &&
+  closePopUp.addEventListener('click', () => {
+    mealPopUp.classList.add('hidden');
+  });
