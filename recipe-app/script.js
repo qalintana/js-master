@@ -1,5 +1,7 @@
 const meals = document.getElementById('meals');
 const favoriteContainer = document.getElementById('fav-meals');
+const searchTerm = document.getElementById('search-term');
+const seachBtn = document.getElementById('search');
 
 getRandomMeal();
 fetchFavMeals();
@@ -32,7 +34,9 @@ async function getMealsBySearch(term) {
     'https://www.themealdb.com/api/json/v1/1/search.php?s=' + term
   );
 
-  console.log(meals);
+  const response = await meals.json();
+
+  return response.meals;
 }
 
 function addMeal(mealData, random = false) {
@@ -42,7 +46,7 @@ function addMeal(mealData, random = false) {
   meal.innerHTML = `
             <div class="meal-header">
             ${
-              random && `<span class="random"> Random Recipe </span>`
+              random ? `<span class="random"> Random Recipe </span>` : ''
             }             
               <img src="${mealData.strMealThumb}" alt="${mealData.strMeal}" />
             </div>
@@ -70,7 +74,6 @@ function addMeal(mealData, random = false) {
         `;
     }
 
-    favoriteContainer.innerHTML = '';
     fetchFavMeals();
   });
   meals.appendChild(meal);
@@ -90,22 +93,31 @@ function getMealsFromLS() {
 }
 
 function removeMealFromLS(mealId) {
-  const mealIds = getMealsFromLS();
+  const mealIds = [...getMealsFromLS()];
 
   if (!mealIds) {
     return;
   }
 
+  // console.log(
+  //   mealIds.forEach((meal) => meal),
+  //   +'djisdwdji'
+  // );
+
   localStorage.setItem(
     'mealIDs',
-    JSON.stringify(mealIds.filter((meal) => meal.id !== mealId))
+    JSON.stringify(
+      mealIds.filter((mealEl) => {
+        return mealEl !== mealId;
+      })
+    )
   );
 }
 
 async function fetchFavMeals() {
-  const mealIds = getMealsFromLS();
+  favoriteContainer.innerHTML = '';
 
-  console.log(mealIds);
+  const mealIds = getMealsFromLS();
 
   for (let i = 0; i < mealIds.length; i++) {
     const mealId = mealIds[i];
@@ -117,11 +129,34 @@ async function fetchFavMeals() {
 function addMealToFav(mealData) {
   const favMeal = document.createElement('li');
 
-  favMeal.innerHTML = `
-     <li>
+  favMeal.innerHTML = `     
     <img src="${mealData.strMealThumb}" alt="" />
-    <span>${mealData.strMeal}</span>
-    </li>
+    <span>${mealData.strMeal}</span>    
+    <button class="clear">x</button>
   `;
+
+  const btn = favMeal.querySelector('.clear');
+
   favoriteContainer.appendChild(favMeal);
+
+  btn.addEventListener('click', () => {
+    console.log(mealData.idMeal);
+    removeMealFromLS(mealData.idMeal);
+
+    fetchFavMeals();
+  });
 }
+
+seachBtn.addEventListener('click', async () => {
+  meals.innerHTML = '';
+  const seach = searchTerm.value;
+  searchTerm.value = '';
+
+  const mealsEl = await getMealsBySearch(seach);
+
+  if (mealsEl) {
+    mealsEl.forEach((meal) => {
+      addMeal(meal);
+    });
+  }
+});
