@@ -1,6 +1,8 @@
 const meals = document.getElementById('meals');
+const favoriteContainer = document.getElementById('fav-meals');
 
 getRandomMeal();
+fetchFavMeals();
 
 async function getRandomMeal() {
   const response = await fetch(
@@ -13,14 +15,16 @@ async function getRandomMeal() {
   // console.log(randomMeal);
 
   addMeal(randomMeal, true);
-  console.log(localStorage.getItem('mealIDs'));
 }
 
 async function getMealById(id) {
   const meal = await fetch(
     'https://www.themealdb.com/api/json/v1/1/lookup.php?i=' + id
   );
-  console.log(meal);
+  const resposeData = await meal.json();
+  const mealEl = resposeData.meals[0];
+
+  return mealEl;
 }
 
 async function getMealsBySearch(term) {
@@ -65,18 +69,22 @@ function addMeal(mealData, random = false) {
           <img src="img/heart.svg" alt="" />
         `;
     }
+
+    favoriteContainer.innerHTML = '';
+    fetchFavMeals();
   });
   meals.appendChild(meal);
 }
 
 function addMealToLS(mealId) {
   const mealIds = getMealsFromLS();
+  const mealsToAddInLS = [...mealIds, mealId];
 
-  localStorage.setItem('mealIDs', [...JSON.stringify(mealIds), mealId]);
+  localStorage.setItem('mealIDs', [JSON.stringify(mealsToAddInLS)]);
 }
 
 function getMealsFromLS() {
-  const mealIds = JSON.parse(localStorage.getItem('mealsIDs'));
+  const mealIds = JSON.parse(localStorage.getItem('mealIDs'));
 
   return mealIds === null ? [] : mealIds;
 }
@@ -89,7 +97,31 @@ function removeMealFromLS(mealId) {
   }
 
   localStorage.setItem(
-    'mealIds',
+    'mealIDs',
     JSON.stringify(mealIds.filter((meal) => meal.id !== mealId))
   );
+}
+
+async function fetchFavMeals() {
+  const mealIds = getMealsFromLS();
+
+  console.log(mealIds);
+
+  for (let i = 0; i < mealIds.length; i++) {
+    const mealId = mealIds[i];
+    let meal = await getMealById(mealId);
+    addMealToFav(meal);
+  }
+}
+
+function addMealToFav(mealData) {
+  const favMeal = document.createElement('li');
+
+  favMeal.innerHTML = `
+     <li>
+    <img src="${mealData.strMealThumb}" alt="" />
+    <span>${mealData.strMeal}</span>
+    </li>
+  `;
+  favoriteContainer.appendChild(favMeal);
 }
