@@ -37,6 +37,9 @@ canvas {
   cursor: pointer;
 }
 
+.toolbox > *:last-child {
+  margin-left: auto;
+}
 .toolbox button:focus,
 .toolbox input:focus {
   outline: transparent;
