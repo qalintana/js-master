@@ -31,6 +31,11 @@ function renderMovies(movie) {
     movie.vote_average
   }</span>
         </div>
+
+        <div class="overview">
+          <h4>Overview:</h4>
+            ${movie.overview}
+        </div>
         `;
 
   main.appendChild(movieEl);

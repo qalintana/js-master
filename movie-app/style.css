@@ -43,6 +43,7 @@ main {
   width: 300px;
   margin: 2rem;
   overflow: hidden;
+  position: relative;
 }
 
 .movie img {
@@ -81,4 +82,26 @@ main {
 
 .movie-info span.red {
   color: rgb(236, 76, 76);
+}
+
+.overview {
+  position: absolute;
+  background-color: #fff;
+  padding: 2rem;
+  max-height: 100%;
+  overflow: hidden;
+  transform: translateY(100%);
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  transition: transform 0.3s ease-in;
+}
+
+.overview h4 {
+  margin-top: 0;
+}
+
+.movie:hover .overview {
+  transform: translateY(0);
 }
