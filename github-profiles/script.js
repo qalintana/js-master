@@ -18,6 +18,7 @@ async function getUser(user = undefined) {
   const responseData = await response.json();
 
   createUserCard(responseData);
+  getRepos(user);
 }
 
 function createUserCard(user) {
@@ -36,11 +37,42 @@ function createUserCard(user) {
                 <li>${user.following}</li>
                 <li>${user.public_repos}</li>
             </ul>   
+
+            <h4>Repos</h4>
+            <div class="repos" id="repos"></div>
         </div>      
   
   </div>   
   `;
   main.innerHTML = cardHTML;
+}
+
+async function getRepos(user) {
+  let completeURL = `${APIURL}github/repos`;
+
+  if (user) {
+    completeURL = `${APIURL}${user}/repos`;
+  }
+
+  const response = await fetch(completeURL);
+  const responseData = await response.json();
+
+  addReposToCard(responseData);
+}
+
+function addReposToCard(repos) {
+  const reposEl = document.getElementById('repos');
+
+  repos.slice(0, 9).forEach((repo) => {
+    const repoEl = document.createElement('a');
+    repoEl.classList.add('repo');
+
+    repoEl.href = repo.html_url;
+    repoEl.target = '_blank';
+    repoEl.innerHTML = repo.name;
+
+    reposEl.appendChild(repoEl);
+  });
 }
 
 form.addEventListener('submit', (e) => {
