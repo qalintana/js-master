@@ -8,6 +8,29 @@ body {
   background-color: #181a33;
 }
 
+header {
+  background-color: #373b69;
+  padding: 1.5rem;
+  display: flex;
+
+  justify-content: flex-end;
+}
+.search {
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  font-size: 1rem;
+  border: 1px solid #22254b;
+  background-color: white;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.search::placeholder {
+  color: #7378c5;
+}
+
+.search:focus {
+  outline: transparent;
+}
+
 main {
   display: flex;
   flex-wrap: wrap;
@@ -53,7 +76,7 @@ main {
 }
 
 .movie-info span.orange {
-  color: orange;
+  color: rgb(192, 128, 8);
 }
 
 .movie-info span.red {
