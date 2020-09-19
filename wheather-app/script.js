@@ -1,11 +1,45 @@
-const APIURL = `https://www.metaweather.com/api`;
-const API_URL = `https://www.metaweather.com/api/location/search/?query=`;
+const apikey = "3265874a2c77ae4a04bb96236a642d2f";
 
-async function getWeatherByLocation(location) {
-  const response = await fetch(`${APIURL}/location/search/?query=${location}`);
-  const responseData = await response.json();
+const form = document.getElementById("form");
+const search = document.getElementById("search");
+const main = document.getElementById("main");
 
+const APIURL = (city) =>
+  `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apikey}`;
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const city = search.value;
+
+  if (city) {
+    getWeatherBycity(city);
+  }
+  search.value = "";
+});
+
+async function getWeatherBycity(city) {
+  const response = await fetch(APIURL(city));
+  let responseData = await response.json();
+  responseData.city = city;
   console.log(responseData);
+
+  addWeaterToPage(responseData);
 }
 
-getWeatherByLocation('london');
+function addWeaterToPage(data) {
+  const temp = KtoC(data.main.temp);
+
+  const weather = document.createElement("div");
+  weather.classList.add("weather");
+
+  weather.innerHTML = `
+    <h2>${temp}ºC</h2>
+    <img src="https://api.openweathermap.org/img/w/${data.weather[0].icon}.png">
+  `;
+  main.innerHTML = "";
+
+  main.appendChild(weather);
+}
+function KtoC(F) {
+  return (F - 273.15).toFixed(2);
+}

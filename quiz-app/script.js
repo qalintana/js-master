@@ -1,65 +1,64 @@
 const quizData = [
   {
-    question: 'How old is Florin?',
-    a: '10',
-    b: '17',
-    c: '26',
+    question: "How old is Florin?",
+    a: "10",
+    b: "17",
+    c: "26",
     d: 110,
-    correct: 'c',
+    correct: "c",
   },
   {
-    question: 'What is the most used programming language in 2019?',
-    a: 'Java',
-    b: 'C',
-    c: 'Python',
-    d: 'Javascript',
-    correct: 'd',
+    question: "What is the most used programming language in 2019?",
+    a: "Java",
+    b: "C",
+    c: "Python",
+    d: "Javascript",
+    correct: "d",
   },
 
   {
-    question: 'Who is he President of US',
-    a: 'Maida Santana',
-    b: 'Paito Paulo',
-    c: 'Donald Trump',
-    d: 'Miahi Muat',
-    correct: 'c',
+    question: "Who is he President of US",
+    a: "Maida Santana",
+    b: "Paito Paulo",
+    c: "Donald Trump",
+    d: "Miahi Muat",
+    correct: "c",
   },
   {
-    question: 'What doews HTML stand for',
-    a: 'Hypertext markup language',
-    b: 'Cascading Style Sheet',
-    c: 'Jason Object Notation',
-    d: 'Helipomo Mm',
-    correct: 'a',
+    question: "What doews HTML stand for",
+    a: "Hypertext markup language",
+    b: "Cascading Style Sheet",
+    c: "Jason Object Notation",
+    d: "Helipomo Mm",
+    correct: "a",
   },
   {
-    question: 'What year Javascript launched',
-    a: '1996',
-    b: '1995',
-    c: '1994',
-    d: '2001',
-    correct: 'a',
+    question: "What year Javascript launched",
+    a: "1996",
+    b: "1995",
+    c: "1994",
+    d: "2001",
+    correct: "a",
   },
 ];
 
-const question = document.getElementById('question');
-const answersEl = document.getElementsByName('answer');
-const quiz = document.getElementById('quiz');
+const question = document.getElementById("question");
+const answersEl = document.getElementsByName("answer");
+const quiz = document.getElementById("quiz");
 
-const a_text = document.getElementById('a_text');
-const b_text = document.getElementById('b_text');
-const c_text = document.getElementById('c_text');
-const d_text = document.getElementById('d_text');
+const a_text = document.getElementById("a_text");
+const b_text = document.getElementById("b_text");
+const c_text = document.getElementById("c_text");
+const d_text = document.getElementById("d_text");
 
-const sendButton = document.getElementById('send');
+const sendButton = document.getElementById("send");
 
 let currentQuestion = 0;
-// let answer = undefined;
 let score = 0;
 
 loadQuiz();
 
-sendButton.addEventListener('click', () => {
+sendButton.addEventListener("click", () => {
   const answer = getSelected();
 
   if (answer) {
